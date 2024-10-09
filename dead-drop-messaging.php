@@ -25,8 +25,12 @@ define( 'DDM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'DDM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 // @todo This will be derived from the plugin settings.
-define( 'DDM_ID_TOKEN', 'QXV5dsw0toVFrpHU6vIoMeZ7cv3vpFs6eQrEfotQa7zohsjgl5cGWt96fDChTLq8' );
-define( 'DDM_ACCESS_TOKEN_LENGTH', 40 );
+define( 'DDM_DEFAULT_ACCESS_TOKEN_LENGTH', 40 );
+
+// Include in admin only.
+if ( is_admin() ) {
+	require_once DDM_PLUGIN_DIR . 'includes/admin/settings-page.php';
+}
 
 /**
  * DDM Enqueue Scripts
@@ -96,9 +100,15 @@ function ddm_handle_authentication_request( WP_REST_Request $request ) {
 		return new WP_REST_Response( array( 'error' => 'Missing Required Parameters' ), 400 );
 	}
 
+	// Validate the ID Token for the mobile application.
+	$ddm_option_id_token = get_option( 'ddm_id_token', false );
+	if ( false === $ddm_option_id_token ) {
+		return new WP_REST_Response( array( 'error' => 'Invalid Request' ), 401 );
+	}
+
 	// @todo Validate the access token. The access token will be for the app itself and not the user.
 	// If authentication is successful, a user access token will be issued to the user.
-	if ( DDM_ID_TOKEN !== $id_token ) {
+	if ( $ddm_option_id_token !== $id_token ) {
 		return new WP_REST_Response( array( 'error' => 'Invalid Request' ), 401 );
 	}
 
@@ -115,13 +125,15 @@ function ddm_handle_authentication_request( WP_REST_Request $request ) {
 	}
 
 	// Allow for custom actions after the authentication request is processed.
-	do_action( 'ddm_after_authentication_request', $user, $access_token );
+	do_action( 'ddm_after_authentication_request', $user, $id_token );
+
+	$ddm_option_access_token_length = get_option( 'ddm_access_token_length', DDM_DEFAULT_ACCESS_TOKEN_LENGTH );
 
 	// Generate an access token for the user.
-	$generated_access_token = wp_generate_password( DDM_ACCESS_TOKEN_LENGTH, false, false );
+	$generated_access_token = wp_generate_password( $ddm_option_access_token_length, false, false );
 
 	// Generate a refresh token for the user.
-	$generated_refresh_token = wp_generate_password( DDM_ACCESS_TOKEN_LENGTH, false, false );
+	$generated_refresh_token = wp_generate_password( $ddm_option_access_token_length, false, false );
 
 	// Assign an expiration time to the access token.
 	$access_token_expires = time() + ( 60 * 60 * 24 * 30 );
