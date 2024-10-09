@@ -1,4 +1,5 @@
 === Dead Drop Messaging ===
+
 Contributors: justingreerbbi
 Donate link: https://justin-greer.com
 Tags: messaging, communication, private, encrytped, secure, mobile application
