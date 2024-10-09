@@ -1,6 +1,8 @@
 Developer Documentation
 
-This is a live working document outlining developer notes and documentation about actions, filters, and todos
+This is a live working document outlining developer notes and documentation about actions, filters, and todos.
+This plugin will be heavy commented so developers and follow along with every aspect of the development and flow of code. There will be no confiluded
+codebase. Just Sweat and Simple.....
 
 Plugin API Endpoints:
 
