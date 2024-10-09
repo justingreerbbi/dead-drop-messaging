@@ -29,8 +29,8 @@ add_action( 'admin_init', 'ddm_admin_notice_on_settings_update' );
  */
 function ddm_add_admin_menu() {
 	add_menu_page(
-		'Dead Drop Messaging Settings',
-		'Dead Drop Messaging',
+		'Dead Drop Settings',
+		'Dead Drop',
 		'manage_options',
 		'ddm-settings',
 		'ddm_settings_page',
@@ -139,4 +139,7 @@ function ddm_id_token_callback() {
 function ddm_access_token_length_callback() {
 	$ddm_access_token_length = get_option( 'ddm_access_token_length', DDM_DEFAULT_ACCESS_TOKEN_LENGTH );
 	echo '<input type="number" name="ddm_access_token_length" value="' . esc_attr( $ddm_access_token_length ) . '" class="small-text">';
+	if ( $ddm_access_token_length < 40 ) {
+		echo '<p class="description">The token length is set below a recommended value.<br />Minimuim Recommended Length is ' . esc_attr( DDM_DEFAULT_ACCESS_TOKEN_LENGTH ) . '</p>';
+	}
 }
