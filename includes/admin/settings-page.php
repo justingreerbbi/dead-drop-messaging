@@ -131,6 +131,7 @@ function ddm_settings_section_callback() {
 function ddm_id_token_callback() {
 	$ddm_id_token = get_option( 'ddm_id_token', '' );
 	echo '<input type="text" name="ddm_id_token" value="' . esc_attr( $ddm_id_token ) . '" class="regular-text">';
+	echo '<p class="description">The ID Token is used to authorize the mobile application with the API.</p>';
 }
 
 /**

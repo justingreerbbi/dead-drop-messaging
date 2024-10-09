@@ -101,6 +101,25 @@ function ddm_handle_authentication_request( WP_REST_Request $request ) {
 	// Assign an expiration time to the access token.
 	$access_token_expires = time() + ( 60 * 60 * 24 * 30 );
 
+	// Insert / Replace the Access Token for the user.
+	global $wpdb;
+	$table_name = $wpdb->prefix . 'ddm_access_tokens';
+	$wpdb->replace(
+		$table_name,
+		array(
+			'access_token'  => $generated_access_token,
+			'user_id'       => $user->ID,
+			'refresh_token' => $generated_refresh_token,
+			'expiration'    => date( 'Y-m-d H:i:s', $access_token_expires ),
+		),
+		array(
+			'%s',
+			'%d',
+			'%s',
+			'%s',
+		)
+	);
+
 	// Build the response to send back to the mobile application.
 	$response = array(
 		'access_token'  => $generated_access_token,

@@ -34,3 +34,36 @@ if ( is_admin() ) {
 
 // Include in the API only.
 require_once DDM_PLUGIN_DIR . 'includes/api/api.php';
+
+/**
+ * PLUGIN INSTALLATION
+ *
+ * This is ran when the plugin is activated.
+ */
+register_activation_hook( __FILE__, 'ddm_install_database_tables' );
+
+/**
+ * Install the database tables.
+ *
+ * This function creates the necessary database tables for the Dead Drop Messaging plugin.
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ */
+function ddm_install_database_tables() {
+	global $wpdb;
+
+	$table_name      = $wpdb->prefix . 'ddm_access_tokens';
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        ID bigint(20) NOT NULL AUTO_INCREMENT,
+        user_id bigint(20) NOT NULL UNIQUE,
+        access_token varchar(255) NOT NULL,
+        refresh_token varchar(255) NOT NULL,
+        expiration datetime NOT NULL,
+        PRIMARY KEY (ID)
+    ) $charset_collate;";
+
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	dbDelta( $sql );
+}

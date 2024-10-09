@@ -4,6 +4,9 @@ This is a live working document outlining developer notes and documentation abou
 This plugin will be heavy commented so developers and follow along with every aspect of the development and flow of code. There will be no confiluded
 codebase. Just Sweat and Simple.....
 
+Access Token Management
+At least for the first round of the plugin, we will restrict any given user to 1 to one device.
+
 Plugin API Endpoints:
 
 Authenticate: wp-json/ddm/v1/authenticate
