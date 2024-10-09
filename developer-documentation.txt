@@ -2,6 +2,10 @@ Developer Documentation
 
 This is a live working document outlining developer notes and documentation about actions, filters, and todos
 
+Plugin API Endpoints:
+
+Authenticate: wp-json/ddm/v1/authenticate
+
 Plugin Actions:
 
 do_action( 'ddm_before_authentication_request', $request );

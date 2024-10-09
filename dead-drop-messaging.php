@@ -28,7 +28,6 @@ define( 'DDM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 define( 'DDM_ID_TOKEN', 'QXV5dsw0toVFrpHU6vIoMeZ7cv3vpFs6eQrEfotQa7zohsjgl5cGWt96fDChTLq8' );
 define( 'DDM_ACCESS_TOKEN_LENGTH', 40 );
 
-
 /**
  * DDM Enqueue Scripts
  * This is used for the Administration side of the plugin.
@@ -45,7 +44,7 @@ add_action( 'wp_enqueue_scripts', 'ddm_enqueue_scripts' );
 function ddm_register_api_endpoints() {
 	register_rest_route(
 		'ddm/v1',
-		'/authorize',
+		'/authenticate',
 		array(
 			'methods'  => 'POST',
 			'callback' => 'ddm_handle_authentication_request',
