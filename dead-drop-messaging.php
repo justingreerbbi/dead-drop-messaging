@@ -66,8 +66,8 @@ add_action( 'rest_api_init', 'ddm_register_api_endpoints' );
  * user_login: The user's email address.
  * user_pass: The user's password.
  *
- * @param WP_REST_Request $request
- * @return WP_REST_Response
+ * @param WP_REST_Request $request The request object containing the authentication data.
+ * @return WP_REST_Response The response object to send back to the mobile application.
  */
 function ddm_handle_authentication_request( WP_REST_Request $request ) {
 
