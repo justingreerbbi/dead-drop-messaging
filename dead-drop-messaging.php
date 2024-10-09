@@ -50,6 +50,14 @@ function ddm_register_api_endpoints() {
 			'callback' => 'ddm_handle_authentication_request',
 		)
 	);
+	register_rest_route(
+		'ddm/v1',
+		'/send-message',
+		array(
+			'methods'  => 'POST',
+			'callback' => 'ddm_handle_send_message_request',
+		)
+	);
 }
 add_action( 'rest_api_init', 'ddm_register_api_endpoints' );
 
@@ -127,6 +135,61 @@ function ddm_handle_authentication_request( WP_REST_Request $request ) {
 
 	// Apply a filter to the response before sending it back to the mobile application.
 	$response = apply_filters( 'ddm_authentication_successfull_response', $response, $user );
+
+	return new WP_REST_Response( $response, 200 );
+}
+
+/**
+ * Handle DDM API send message request
+ * This will handle the send message request from the mobile application.
+ * All Fields MUST be sanitized before using them.
+ * This also provides custom actions to allow for custom hooks.
+ *
+ * access_token: The access token issued to the user.
+ * refresh_token: The refresh token issued to the user.
+ * recipient: The recipient's email address.
+ * message: The message to send to the recipient.
+ *
+ * @param WP_REST_Request $request The request object containing the message data.
+ * @return WP_REST_Response The response object to send back to the mobile application.
+ */
+function ddm_handle_send_message_request( WP_REST_Request $request ) {
+	// Always check for SSL. This is a requirement for the API. NO EXCEPTIONS.
+	if ( ! is_ssl() ) {
+		return new WP_REST_Response( array( 'error' => 'SSL Required' ), 400 );
+	}
+
+	// Allow for custom actions before the authentication request is processed.
+	do_action( 'ddm_before_send_message_request', $request );
+
+	// Sanitize the request parameters.
+	$access_token = sanitize_text_field( $request->get_param( 'access_token' ) );
+
+	// Recipient is the users ID.
+	$recipient = sanitize_text_field( $request->get_param( 'recipient' ) );
+
+	// Note the message will already be encrypted by the mobile application so we just need to sanitize it and store it.
+	$message = sanitize_text_field( $request->get_param( 'message' ) );
+
+	// Validate the request parameters.
+	if ( empty( $access_token ) || empty( $recipient ) || empty( $message ) ) {
+		return new WP_REST_Response( array( 'error' => 'Missing Required Parameters' ), 400 );
+	}
+
+	// @todo Validate the access token. The access token will be for the app itself and not the user.
+	// Get User ID from the access token. For now, we will simply use a static user ID.
+	$user_id = 1;
+
+	// Allow for custom actions after the authentication request is processed.
+	do_action( 'ddm_after_send_message_request', $user_id, $recipient, $message );
+
+	// Build the response to send back to the mobile application.
+	$response = array(
+		'message' => 'Messaga Received and Sent',
+	);
+
+	// Apply a filter to the response before sending it back to the mobile application.
+	$response = apply_filters( 'ddm_send_message_successfull_response', $response, $user_id, $recipient, $message );
 
 	return new WP_REST_Response( $response, 200 );
 }
