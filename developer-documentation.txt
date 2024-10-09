@@ -1,0 +1,20 @@
+Developer Documentation
+
+This is a live working document outlining developer notes and documentation about actions, filters, and todos
+
+Plugin Actions:
+
+do_action( 'ddm_before_authentication_request', $request );
+do_action( 'ddm_failed_authentication_request', $request );
+do_action( 'ddm_after_authentication_request', $user, $access_token );
+
+Plugin Filters:
+
+$response = apply_filters( 'ddm_authentication_successfull_response', $response, $user );
+
+ToDo's:
+
+- Add plugin settings for the following: 
+    - ID Token
+    - Token Length
+    - Token Expires
