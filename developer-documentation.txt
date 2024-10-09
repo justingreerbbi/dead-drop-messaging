@@ -14,9 +14,13 @@ do_action( 'ddm_before_authentication_request', $request );
 do_action( 'ddm_failed_authentication_request', $request );
 do_action( 'ddm_after_authentication_request', $user, $access_token );
 
+do_action( 'ddm_before_send_message_request', $request );
+
 Plugin Filters:
 
 $response = apply_filters( 'ddm_authentication_successfull_response', $response, $user );
+$response = apply_filters( 'ddm_send_message_successfull_response', $response, $user_id, $recipient, $message );
+
 
 ToDo's:
 

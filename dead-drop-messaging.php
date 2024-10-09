@@ -154,6 +154,7 @@ function ddm_handle_authentication_request( WP_REST_Request $request ) {
  * @return WP_REST_Response The response object to send back to the mobile application.
  */
 function ddm_handle_send_message_request( WP_REST_Request $request ) {
+
 	// Always check for SSL. This is a requirement for the API. NO EXCEPTIONS.
 	if ( ! is_ssl() ) {
 		return new WP_REST_Response( array( 'error' => 'SSL Required' ), 400 );
@@ -179,9 +180,6 @@ function ddm_handle_send_message_request( WP_REST_Request $request ) {
 	// @todo Validate the access token. The access token will be for the app itself and not the user.
 	// Get User ID from the access token. For now, we will simply use a static user ID.
 	$user_id = 1;
-
-	// Allow for custom actions after the authentication request is processed.
-	do_action( 'ddm_after_send_message_request', $user_id, $recipient, $message );
 
 	// Build the response to send back to the mobile application.
 	$response = array(
