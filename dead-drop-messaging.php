@@ -38,11 +38,7 @@ if ( is_admin() ) {
 // Include in the API only.
 require_once DDM_PLUGIN_DIR . 'includes/api/api.php';
 
-/**
- * PLUGIN INSTALLATION
- *
- * This is ran when the plugin is activated.
- */
+// Register the activation hook.
 register_activation_hook( __FILE__, 'ddm_install_database_tables' );
 
 /**
