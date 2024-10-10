@@ -58,7 +58,7 @@ function ddm_admin_notice_on_update() {
 			function () {
 				?>
 			<div class="notice notice-success is-dismissible">
-				<p><?php esc_html_e( 'Dead Drop Messaging plugin has been updated to version ' . DDM_PLUGIN_VERSION . '.', 'dead-drop-messaging' ); ?></p>
+				<p><?php echo esc_html( sprintf( 'Dead Drop Messaging plugin has been updated to version %s.', DDM_PLUGIN_VERSION ) ); ?></p>
 			</div>
 				<?php
 			}

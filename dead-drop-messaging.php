@@ -27,6 +27,9 @@ define( 'DDM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 // @todo This will be derived from the plugin settings.
 define( 'DDM_DEFAULT_ACCESS_TOKEN_LENGTH', 40 );
 
+// Include the main functions.
+require_once DDM_PLUGIN_DIR . 'includes/functions.php';
+
 // Include in admin only.
 if ( is_admin() ) {
 	require_once DDM_PLUGIN_DIR . 'includes/admin/settings-page.php';
