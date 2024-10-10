@@ -62,8 +62,8 @@ function ddm_install_database_tables() {
         PRIMARY KEY (ID)
     ) $charset_collate;";
 
-	$messages_table_name         = $wpdb->prefix . 'ddm_messages';
-	$messages_table_creation_sql = "CREATE TABLE IF NOT EXISTS $messages_table_name (
+	$direct_messages_table_name         = $wpdb->prefix . 'ddm_direct_messages';
+	$direct_messages_table_creation_sql = "CREATE TABLE IF NOT EXISTS $direct_messages_table_name (
         ID bigint(20) NOT NULL AUTO_INCREMENT,
         user_id bigint(20) NOT NULL,
         recipient bigint(20) NOT NULL,
@@ -72,7 +72,27 @@ function ddm_install_database_tables() {
         PRIMARY KEY (ID)
     ) $charset_collate;";
 
+	$group_messages_table_name         = $wpdb->prefix . 'ddm_group_messages';
+	$group_messages_table_creation_sql = "CREATE TABLE IF NOT EXISTS $group_messages_table_name (
+        ID bigint(20) NOT NULL AUTO_INCREMENT,
+        user_id bigint(20) NOT NULL,
+        message_content text NOT NULL,
+        group_id bigint(20) NOT NULL,
+        posted datetime NOT NULL,
+        PRIMARY KEY (ID)
+    ) $charset_collate;";
+
+	$groups_table_name         = $wpdb->prefix . 'ddm_groups';
+	$groups_table_creation_sql = "CREATE TABLE IF NOT EXISTS $groups_table_name (
+        ID bigint(20) NOT NULL AUTO_INCREMENT,
+        group_name bigint(20) NOT NULL,
+        group_owner bigint(20) NOT NULL,
+        PRIMARY KEY (ID)
+    ) $charset_collate;";
+
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 	dbDelta( $access_token_table_creation_sql );
-	dbDelta( $messages_table_creation_sql );
+	dbDelta( $direct_messages_table_creation_sql );
+	dbDelta( $group_messages_table_creation_sql );
+	dbDelta( $groups_table_creation_sql );
 }
