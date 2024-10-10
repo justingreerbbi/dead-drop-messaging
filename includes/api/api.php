@@ -348,13 +348,30 @@ function ddm_handle_send_message_request( WP_REST_Request $request ) {
 
 	$user_id = $access_token->user_id;
 
-	// Build the response to send back to the mobile application.
-	$response = array(
-		'message' => 'Messaga Received and Sent',
+	// Insert the message into the database.
+	$insert = $wpdb->insert(
+		$wpdb->prefix . 'ddm_messages',
+		array(
+			'user_id'         => $user_id,
+			'recipient'       => $recipient,
+			'message_content' => $message,
+			'posted'          => gmdate( 'Y-m-d H:i:s', time() ),
+		),
+		array(
+			'%d',
+			'%d',
+			'%s',
+			'%s',
+		),
 	);
 
-	// Apply a filter to the response before sending it back to the mobile application.
-	$response = apply_filters( 'ddm_send_message_successfull_response', $response, $user_id, $recipient, $message );
+		// Build the response to send back to the mobile application.
+		$response = array(
+			'message' => 'Messaga Received and Sent',
+		);
 
-	return new WP_REST_Response( $response, 200 );
+		// Apply a filter to the response before sending it back to the mobile application.
+		$response = apply_filters( 'ddm_send_message_successfull_response', $response, $user_id, $recipient, $message );
+
+		return new WP_REST_Response( $response, 200 );
 }
