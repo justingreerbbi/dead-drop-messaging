@@ -54,11 +54,10 @@ register_activation_hook( __FILE__, 'ddm_install_database_tables' );
  */
 function ddm_install_database_tables() {
 	global $wpdb;
-
-	$table_name      = $wpdb->prefix . 'ddm_access_tokens';
 	$charset_collate = $wpdb->get_charset_collate();
 
-	$sql = "CREATE TABLE IF NOT EXISTS $table_name (
+	$access_token_table_name         = $wpdb->prefix . 'ddm_access_tokens';
+	$access_token_table_creation_sql = "CREATE TABLE IF NOT EXISTS $access_token_table_name (
         ID bigint(20) NOT NULL AUTO_INCREMENT,
         user_id bigint(20) NOT NULL UNIQUE,
         access_token varchar(255) NOT NULL,
@@ -67,6 +66,17 @@ function ddm_install_database_tables() {
         PRIMARY KEY (ID)
     ) $charset_collate;";
 
+	$messages_table_name         = $wpdb->prefix . 'ddm_messages';
+	$messages_table_creation_sql = "CREATE TABLE IF NOT EXISTS $messages_table_name (
+        ID bigint(20) NOT NULL AUTO_INCREMENT,
+        user_id bigint(20) NOT NULL,
+        recipient bigint(20) NOT NULL,
+        message_content text NOT NULL,
+        posted datetime NOT NULL,
+        PRIMARY KEY (ID)
+    ) $charset_collate;";
+
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-	dbDelta( $sql );
+	dbDelta( $access_token_table_creation_sql );
+	dbDelta( $messages_table_creation_sql );
 }
