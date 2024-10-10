@@ -47,7 +47,7 @@ function ddm_add_admin_menu() {
  */
 function ddm_admin_notice_on_update() {
 	// Check if the plugin version has been updated.
-	if ( get_option( 'ddm_plugin_version' ) !== DDM_PLUGIN_VERSION ) {
+	if ( DDM_PLUGIN_VERSION !== get_option( 'ddm_plugin_version' ) ) {
 
 		// Update the stored plugin version.
 		update_option( 'ddm_plugin_version', DDM_PLUGIN_VERSION );
