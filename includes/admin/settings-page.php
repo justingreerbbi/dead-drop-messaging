@@ -9,7 +9,7 @@
  * Add an admin notice when the plugin settings page is updated.
  */
 function ddm_admin_notice_on_settings_update() {
-	if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) {
+	if ( isset( $_GET['settings-updated'] ) ) {
 		add_action(
 			'admin_notices',
 			function () {
