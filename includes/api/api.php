@@ -61,6 +61,9 @@ add_action( 'rest_api_init', 'ddm_register_api_endpoints' );
  */
 function ddm_handle_authentication_request( WP_REST_Request $request ) {
 
+	wp_send_json( $request->get_params() );
+	exit;
+
 	// Always check for SSL. This is a requirement for the API. NO EXCEPTIONS.
 	if ( ! is_ssl() ) {
 		return new WP_REST_Response( array( 'error' => 'SSL Required' ), 400 );
